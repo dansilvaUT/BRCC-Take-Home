@@ -1,0 +1,16 @@
+# Implement a query node that returns a list of todos
+type Query {
+    todos: [String]
+}
+
+# Implement the Todo node with the following fields: id, title, and completed status
+type Todo {
+    title: String
+}
+
+# Implement the following mutations: createTodo, deleteTodo, and updateTodo
+type Mutation {
+    createTodo(data: JSON): Todo,
+    deleteTodo(where: JSON): Int,
+    updateTodo(values: JSON, options: JSON): [JSON],
+}
