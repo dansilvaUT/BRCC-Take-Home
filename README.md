@@ -1,7 +1,7 @@
 # Web Interview Project
 
 ### Step 1:
-Using any tools provided let's build a TODO web appliaction. The app only needs to do a couple of things. Primarily it is going to interact with the local sqlite3 database. You can find an example of what the basic app should be able to accomplish in the `static/example` directory.
+Using any tools provided let's build a TODO web application. The app only needs to do a couple of things. Primarily it is going to interact with the local sqlite3 database. You can find an example of what the basic app should be able to accomplish in the `static/example` directory.
 
 Most of what needs to be changed in the project is labeled with a `TODO`. You shouldn't have to spend too much time (if any) setting up configs. All of your work should be done in the UI and Apollo.
 
