@@ -1,7 +1,9 @@
-import {resolver} from 'graphql-sequelize';
-
 const todo = {
-  todos: resolver(() => ''),
+  // TODO: Implement the todos query
+  async todos(parent, args, context, info) {
+    return '';
+  },
 };
+
 
 export default todo;

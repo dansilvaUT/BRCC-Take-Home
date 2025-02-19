@@ -1,6 +1,6 @@
 const todo = {
   // TODO: Implement the createTodo mutation
-  async createTodo() {
+  async createTodo(parent, args, context, info) {
     return '';
   },
 

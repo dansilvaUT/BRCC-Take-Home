@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TextField,
   makeStyles,
   Fab,
   Container,
+  Typography,
 } from '@material-ui/core';
 import clsx from 'clsx';
 import AddIcon from '@material-ui/icons/Add';
-import { initializeApollo } from '../lib/apolloClient';
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -30,13 +30,15 @@ const Index = () => {
   // TODO: Implement a useQuery for getting a list of current 
   // TODO: Implement a useMutation for adding TODOs to the list
 
-  /* if (loading) {
-    return <Typography>Loading...</Typography>;
-  } */
+  // TODO: implement state variable for todo
+  
+  // if (loading) {
+  //   return <Typography>Loading...</Typography>;
+  // }
 
-  /* if (error) {
-    return <Typography>Error!</Typography>;
-  } */
+  // if (error) {
+  //   return <Typography>Error!</Typography>;
+  // }
 
   return (
     <Container maxWidth={'sm'}>
@@ -55,25 +57,15 @@ const Index = () => {
         <Fab color="primary"
           aria-label="add"
           className={classes.fab}
-          type={'submit'}>
+          type="submit"
+          onClick={() => {}}
+        >
           <AddIcon/>
         </Fab>
       </form>
-      {/* <TodoList todos={todos}/> */}
+      {/* TODO: Render TodoList component and pass todos data */}
     </Container>
   );
-};
-
-export const getServerSideProps = async () => {
-  const apolloClient = initializeApollo();
-
-  // TODO: Fetch initial data here using apolloClient
-
-  return {
-    props: {
-      initialApolloState: apolloClient.cache.extract(),
-    },
-  };
 };
 
 export default Index;

@@ -1,11 +1,13 @@
-import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core';
 // import {useMutation} from '@apollo/react-hooks';
 // import {DELETE_TODO, GET_TODOS, UPDATE_TODO} from '../document-nodes/todo';
 
+// NOTE: we typically use TypeScript in our codebase, but for this coding assessment we suggest using JSDoc instead.
+
 // TODO: implement styling
 const useStyles = makeStyles((theme) => ({}));
 
+// TODO: Update TodoList component to render list items.
 const TodoList = ({todos}) => {
   const classes = useStyles();
 
@@ -13,15 +15,11 @@ const TodoList = ({todos}) => {
   // TODO: implement updateTodo mutation
   
 
-  // TODO: implement apollo hooks for deleteTodo and updateTodo mutations
+  // TODO: Render TodoList items
   return (
     <>
     </>
   );
-};
-
-TodoList.propTypes = {
-  todos: PropTypes.array.isRequired,
 };
 
 export default TodoList;
