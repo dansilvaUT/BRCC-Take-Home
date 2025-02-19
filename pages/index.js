@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   TextField,
   makeStyles,
@@ -6,6 +7,7 @@ import {
 } from '@material-ui/core';
 import clsx from 'clsx';
 import AddIcon from '@material-ui/icons/Add';
+import { initializeApollo } from '../lib/apolloClient';
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -60,6 +62,18 @@ const Index = () => {
       {/* <TodoList todos={todos}/> */}
     </Container>
   );
+};
+
+export const getServerSideProps = async () => {
+  const apolloClient = initializeApollo();
+
+  // TODO: Fetch initial data here using apolloClient
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+    },
+  };
 };
 
 export default Index;

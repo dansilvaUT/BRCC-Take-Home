@@ -1,7 +1,6 @@
 'use strict';
 
-import uuid from 'uuid/v4';
-
+const { v4: uuidv4 } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
   const Todo = sequelize.define('Todo', {
     id: {
@@ -31,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Todo.beforeValidate((instance) => {
-    instance.id = uuid();
+    instance.id = uuidv4();
   });
 
   Todo.associate = function(models) {};

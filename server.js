@@ -15,30 +15,31 @@ const nextApp = next({dev});
 const handle = nextApp.getRequestHandler(); // part of next config
 const {models} = sequelize;
 
-nextApp.prepare().then(() => {
-  // Express =============================================
-  const express = new Express;
-  express.use(bodyParser.json());
-  express.use(bodyParser.urlencoded({extended: true}));
+nextApp.prepare().then(async () => {
+// Express =============================================
+const express = new Express;
+express.use(bodyParser.json());
+express.use(bodyParser.urlencoded({extended: true}));
 
-  // Apollo ==============================================
-  const apolloServer = new ApolloServer({
+// Apollo ==============================================
+const apolloServer = new ApolloServer({
     resolvers,
     typeDefs,
     context: async () => ({models}),
-  });
+});
 
-  express.all('*', (req, res, next) => {
+express.all('*', (req, res, next) => {
     if (req.url === apolloServer.graphqlPath) {
-      return next();
+    return next();
     }
 
     return handle(req, res); 
-  });
+});
 
-  apolloServer.applyMiddleware({
+await apolloServer.start();
+apolloServer.applyMiddleware({
     app: express,
-  });
+});
 
   express.listen({port}, () => {
     console.log(

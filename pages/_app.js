@@ -1,26 +1,23 @@
 import React from 'react';
-import App from 'next/app';
-import {ApolloProvider} from '@apollo/react-hooks';
-
-import withApollo from '../lib/with-apollo';
+import { Apollo } from '../lib/apolloClient';
 import Layout from '../components/Layout';
+import Head from 'next/head';
 
-// eslint-disable-next-line require-jsdoc
-class MyApp extends App {
-  /**
-   * Render component
-   * @return {*}
-   */
-  render() {
-    const {Component, pageProps, apollo} = this.props;
-    return (
-      <ApolloProvider client={apollo}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ApolloProvider>
-    );
-  }
-}
+const MyApp = ({ Component, pageProps }) => {
+  return (
+    <Apollo initialState={pageProps.initialApolloState}>
+      <Head>
+        <meta charSet="utf-8"/>
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+          />
+      </Head>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </Apollo>
+  );
+};
 
-export default withApollo(MyApp);
+export default MyApp;
