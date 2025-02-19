@@ -6,7 +6,7 @@ Using any tools provided let's build a TODO web appliaction. The app only needs 
 Most of what needs to be changed in the project is labeled with a `TODO`. You shouldn't have to spend too much time (if any) setting up configs. All of your work should be done in the UI and Apollo.
 
 ### Step 2:
-You also will create a new About page that will have two or three sentences explaining how you approached the project. (This can be very basic and doesn't require styling, we just want to see a new route created in Next.js and read briefly about the project). Currently this project uses `pages` directory, but feel free to refactor it to use the `app` directory if you'd like. Completely up to you.
+You also will create a new About page that will have two or three sentences explaining how you approached the project. (This can be very basic and doesn't require styling, we just want to see a new route created in Next.js and read briefly about the project).
 
 Make sure to finish the acceptance criteria first before moving on to any bonus points.
 
