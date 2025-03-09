@@ -1,17 +1,17 @@
 const todo = {
   // TODO: Implement the createTodo mutation
   async createTodo(parent, args, context, info) {
-    return '';
+    return;
   },
 
   // TODO: Implement the deleteTodo mutation
   async deleteTodo() {
-    return '';
+    return "";
   },
 
   // TODO: Implement the updateTodo mutation
   async updateTodo() {
-    return '';
+    return "";
   },
 };
 

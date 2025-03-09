@@ -1,9 +1,8 @@
 const todo = {
   // TODO: Implement the todos query
   async todos(parent, args, context, info) {
-    return '';
+    return [];
   },
 };
-
 
 export default todo;
