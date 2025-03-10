@@ -21,15 +21,19 @@ mutation CreateTodo($data: TodoInput!) {
 }
 `;
 
-// // TODO: implement a DELETE_TODOS mutation that will be used in the appolloClient
-// export const DELETE_TODO = gql``;
+// TODO: implement a DELETE_TODOS mutation that will be used in the appolloClient
+export const DELETE_TODO = gql`
+mutation DeleteTodo($id: ID!) {
+  deleteTodo(id: $id)
+}
+`;
 
 // // TODO: implement a UPDATE_TODOS mutation that will be used in the appolloClient
 // export const UPDATE_TODO = gql``;
 
 export default {
   GET_TODOS,
-  // DELETE_TODO,
+  DELETE_TODO,
   ADD_TODO,
   // UPDATE_TODO,
 };

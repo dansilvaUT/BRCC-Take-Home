@@ -14,7 +14,18 @@ const todo = {
   },
 
   // TODO: Implement the deleteTodo mutation
-  async deleteTodo() {
+  async deleteTodo(parent, args, context, info) {
+    try {
+      const todo = await context.models.Todo.destroy({
+        where: { id: args.id },
+      });
+      if (!todo) {
+        throw new Error("Failed to delete todo");
+      }
+      return args.id;
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+    }
     return "";
   },
 

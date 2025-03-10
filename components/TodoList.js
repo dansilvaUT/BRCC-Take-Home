@@ -13,8 +13,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import React, { useState } from "react";
 import { getNonCompletedTodos } from "../utils/todoList.utils";
 
-// import {useMutation} from '@apollo/react-hooks';
-// import {DELETE_TODO, GET_TODOS, UPDATE_TODO} from '../document-nodes/todo';
+import { useMutation } from "@apollo/react-hooks";
+import { DELETE_TODO, GET_TODOS } from "../document-nodes/todo";
 
 // NOTE: we typically use TypeScript in our codebase, but for this coding assessment we suggest using JSDoc instead.
 
@@ -46,6 +46,20 @@ const TodoList = ({ todos }) => {
   const [checked, setChecked] = useState(false);
 
   // TODO: implement deleteTodo mutation
+  const [deleteTodo, { error: deleteTodoError, data: deletedTodoId }] =
+    useMutation(DELETE_TODO, {
+      update(cache, { data: { deleteTodo } }) {
+        cache.modify({
+          fields: {
+            todos(existingTodos, { readField }) {
+              return existingTodos.filter(
+                (todo) => readField("id", todo) !== deleteTodo
+              );
+            },
+          },
+        });
+      },
+    });
   // TODO: implement updateTodo mutation
 
   // TODO: Render TodoList items
@@ -64,10 +78,15 @@ const TodoList = ({ todos }) => {
             <Checkbox
               className={classes.checkBox}
               checked={todo.completed}
+              disabled={todo.completed}
               onChange={() => setChecked(!checked)}
             />
             <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="delete">
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => deleteTodo({ variables: { id: todo.id } })}
+              >
                 <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>
