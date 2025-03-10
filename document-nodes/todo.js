@@ -23,17 +23,25 @@ mutation CreateTodo($data: TodoInput!) {
 
 // TODO: implement a DELETE_TODOS mutation that will be used in the appolloClient
 export const DELETE_TODO = gql`
-mutation DeleteTodo($id: ID!) {
+mutation DeleteTodo($id: String!) {
   deleteTodo(id: $id)
 }
 `;
 
-// // TODO: implement a UPDATE_TODOS mutation that will be used in the appolloClient
-// export const UPDATE_TODO = gql``;
+// TODO: implement a UPDATE_TODOS mutation that will be used in the appolloClient
+export const UPDATE_TODO = gql`
+mutation UpdateTodo( $id: String!, $data: TodoInput!) {
+  updateTodo( id: $id, data: $data) {
+    id
+    title
+    completed
+  }
+}
+`;
 
 export default {
   GET_TODOS,
   DELETE_TODO,
   ADD_TODO,
-  // UPDATE_TODO,
+  UPDATE_TODO,
 };

@@ -18,6 +18,6 @@ input TodoInput {
 }
 type Mutation {
   createTodo(data: TodoInput!): Todo
-  deleteTodo(id: ID!): String
-  updateTodo(values: JSON, options: JSON): [JSON]
+  deleteTodo(id: String!): String
+  updateTodo(id: String!, data: TodoInput, options: JSON): Todo
 }

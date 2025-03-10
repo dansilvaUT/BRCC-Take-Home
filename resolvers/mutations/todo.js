@@ -26,12 +26,24 @@ const todo = {
     } catch (error) {
       console.error("Error deleting todo:", error);
     }
-    return "";
   },
 
   // TODO: Implement the updateTodo mutation
-  async updateTodo() {
-    return "";
+  async updateTodo(parent, args, context, info) {
+    try {
+      const updatedTodoRow = await context.models.Todo.update(args.data, {
+        where: { id: args.id },
+        returning: true,
+        plain: true,
+      });
+      if (!updatedTodoRow[1]) {
+        throw new Error("Failed to update todo");
+      }
+      const updatedTodo = await context.models.Todo.findByPk(args.id);
+      return updatedTodo;
+    } catch (error) {
+      console.error("Error updating todo:", error);
+    }
   },
 };
 

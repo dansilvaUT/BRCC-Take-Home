@@ -10,11 +10,11 @@ import {
   Typography,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import React, { useState } from "react";
+import React from "react";
 import { getNonCompletedTodos } from "../utils/todoList.utils";
 
 import { useMutation } from "@apollo/react-hooks";
-import { DELETE_TODO, GET_TODOS } from "../document-nodes/todo";
+import { DELETE_TODO, UPDATE_TODO } from "../document-nodes/todo";
 
 // NOTE: we typically use TypeScript in our codebase, but for this coding assessment we suggest using JSDoc instead.
 
@@ -34,8 +34,12 @@ const useStyles = makeStyles((theme) => ({
   checkBox: {
     color: "green",
     "&.Mui-checked": {
-      color: "green",
+      color: "#1fb91fb0",
+      cursor: "not-allowed",
     },
+  },
+  trashIcon: {
+    color: "#de4043",
   },
 }));
 
@@ -43,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
 
 const TodoList = ({ todos }) => {
   const classes = useStyles();
-  const [checked, setChecked] = useState(false);
 
   // TODO: implement deleteTodo mutation
   const [deleteTodo, { error: deleteTodoError, data: deletedTodoId }] =
@@ -61,6 +64,8 @@ const TodoList = ({ todos }) => {
       },
     });
   // TODO: implement updateTodo mutation
+  const [updateTodo, { error: updateTodoError, data: updatedTodo }] =
+    useMutation(UPDATE_TODO);
 
   // TODO: Render TodoList items
   return (
@@ -79,7 +84,14 @@ const TodoList = ({ todos }) => {
               className={classes.checkBox}
               checked={todo.completed}
               disabled={todo.completed}
-              onChange={() => setChecked(!checked)}
+              onChange={() =>
+                updateTodo({
+                  variables: {
+                    id: todo.id,
+                    data: { title: todo.title, completed: true },
+                  },
+                })
+              }
             />
             <ListItemSecondaryAction>
               <IconButton
@@ -87,7 +99,7 @@ const TodoList = ({ todos }) => {
                 aria-label="delete"
                 onClick={() => deleteTodo({ variables: { id: todo.id } })}
               >
-                <DeleteIcon />
+                <DeleteIcon className={classes.trashIcon} />
               </IconButton>
             </ListItemSecondaryAction>
           </ListItem>
