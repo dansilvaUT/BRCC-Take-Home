@@ -10,6 +10,7 @@ import clsx from "clsx";
 import AddIcon from "@material-ui/icons/Add";
 import { useQuery, useMutation } from "@apollo/client";
 import TodoList from "../components/TodoList";
+import gql from "graphql-tag";
 
 import { GET_TODOS, ADD_TODO } from "../document-nodes/todo";
 // Styles
@@ -38,10 +39,18 @@ const Index = () => {
   } = useQuery(GET_TODOS);
 
   // TODO: Implement a useMutation for adding TODOs to the list
-  const [
-    addTodoMutation,
-    { data: addTodoData, loading: addTodoLoading, error: addTodoError },
-  ] = useMutation(ADD_TODO);
+  const [addTodoMutation, { loading: addTodoLoading, error: addTodoError }] =
+    useMutation(ADD_TODO, {
+      update(cache, { data: { createTodo } }) {
+        cache.modify({
+          fields: {
+            todos(existingTodos = []) {
+              return [...existingTodos, createTodo]; // Append new todo directly
+            },
+          },
+        });
+      },
+    });
 
   // TODO: implement state variable for todo
   const [newTodo, setNewTodo] = useState({ title: "", completed: false });
@@ -86,7 +95,6 @@ const Index = () => {
           aria-label="add"
           className={classes.fab}
           type="submit"
-          onClick={() => {}}
         >
           <AddIcon />
         </Fab>
