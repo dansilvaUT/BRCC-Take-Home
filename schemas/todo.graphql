@@ -5,7 +5,7 @@ type Query {
 
 # TODO: Update the Todo node with the following fields: id, title, and completed status
 type Todo {
-  id: Int!
+  id: String!
   title: String!
   completed: Boolean!
 }
@@ -18,6 +18,6 @@ input TodoInput {
 }
 type Mutation {
   createTodo(data: TodoInput!): Todo
-  deleteTodo(where: JSON): Int
+  deleteTodo(where: JSON): String
   updateTodo(values: JSON, options: JSON): [JSON]
 }

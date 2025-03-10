@@ -11,8 +11,15 @@ query GetTodos {
 }
 `;
 
-// // TODO: implement a ADD_TODOS mutation that will be used in the appolloClient
-// export const ADD_TODO = gql``;
+// TODO: implement a ADD_TODOS mutation that will be used in the appolloClient
+export const ADD_TODO = gql`
+mutation CreateTodo($data: TodoInput!) {
+  createTodo(data: $data) {
+    title
+    completed
+  }
+}
+`;
 
 // // TODO: implement a DELETE_TODOS mutation that will be used in the appolloClient
 // export const DELETE_TODO = gql``;
@@ -23,6 +30,6 @@ query GetTodos {
 export default {
   GET_TODOS,
   // DELETE_TODO,
-  // ADD_TODO,
+  ADD_TODO,
   // UPDATE_TODO,
 };

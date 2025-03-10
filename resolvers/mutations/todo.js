@@ -1,7 +1,7 @@
 const todo = {
   // TODO: Implement the createTodo mutation
   async createTodo(parent, args, context, info) {
-    return;
+    return args.data;
   },
 
   // TODO: Implement the deleteTodo mutation
