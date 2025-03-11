@@ -4,7 +4,7 @@ import {
   ListItem,
   IconButton,
   Checkbox,
-  ListItemText,
+  TextField,
   ListItemSecondaryAction,
   Container,
   Typography,
@@ -31,7 +31,16 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     justifyContent: "space-between",
   },
-
+  todoField: {
+    border: "none",
+    "& .MuiInputBase-input": {
+      cursor: "pointer",
+      border: "none",
+    },
+    "& .MuiInput-underline:before, & .MuiInput-underline:after": {
+      border: "none",
+    },
+  },
   checkBox: {
     color: "green",
     "&.Mui-checked": {
@@ -48,6 +57,13 @@ const useStyles = makeStyles(() => ({
 const TodoList = ({ todos }) => {
   const classes = useStyles();
   const [search, setSearch] = React.useState("");
+  const [editedTodo, setEditedTodo] = React.useState({});
+
+  const handleSave = (todo) => {
+    if (editedTodo.id === todo.id && editedTodo.title !== todo.title) {
+      console.log("Save todo", editedTodo);
+    }
+  };
 
   // TODO: implement deleteTodo mutation
   const [deleteTodo, { error: deleteTodoError }] = useMutation(DELETE_TODO, {
@@ -67,7 +83,6 @@ const TodoList = ({ todos }) => {
     },
   });
 
-  console.log({ deleteTodoError });
   // TODO: implement updateTodo mutation
   const [updateTodo, { error: updateTodoError, data: updatedTodo }] =
     useMutation(UPDATE_TODO);
@@ -84,35 +99,55 @@ const TodoList = ({ todos }) => {
         </Typography>
         <FilterSearch search={search} setSearch={setSearch} />
       </Container>
-      <List dense>
-        {filteredTodos.map((todo) => (
-          <ListItem key={todo.id} className={classes.listItem}>
-            <ListItemText primary={todo.title} />
-            <Checkbox
-              className={classes.checkBox}
-              checked={todo.completed}
-              disabled={todo.completed}
-              onChange={() =>
-                updateTodo({
-                  variables: {
-                    id: todo.id,
-                    data: { title: todo.title, completed: true },
-                  },
-                })
-              }
-            />
-            <ListItemSecondaryAction>
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={() => deleteTodo({ variables: { id: todo.id } })}
-              >
-                <DeleteIcon className={classes.trashIcon} />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
-      </List>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          console.log("event");
+        }}
+      >
+        {/* Hidden button so the edited todo can be submitted with enter key */}
+        <button type="submit" style={{ display: "none" }} />
+        <List dense>
+          {filteredTodos.map((todo) => (
+            <ListItem key={todo.id} className={classes.listItem}>
+              <TextField
+                fullWidth
+                value={
+                  todo.id === editedTodo.id ? editedTodo.title : todo.title
+                }
+                disabled={todo.completed}
+                className={classes.todoField}
+                onChange={(e) =>
+                  setEditedTodo({ ...todo, title: e.target.value })
+                }
+                onBlur={() => handleSave(todo)}
+              />
+              <Checkbox
+                className={classes.checkBox}
+                checked={todo.completed}
+                disabled={todo.completed}
+                onChange={() =>
+                  updateTodo({
+                    variables: {
+                      id: todo.id,
+                      data: { title: todo.title, completed: true },
+                    },
+                  })
+                }
+              />
+              <ListItemSecondaryAction>
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={() => deleteTodo({ variables: { id: todo.id } })}
+                >
+                  <DeleteIcon className={classes.trashIcon} />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+        </List>
+      </form>
     </>
   );
 };
