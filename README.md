@@ -18,7 +18,7 @@ Reference the [React](https://react.dev), [Apollo](https://www.apollographql.com
 
 - [x] The user should be able to create a new todo item by entering a description and pressing a "+" button.
 - [x] The user should be able to mark a todo item as complete by clicking a checkbox next to the item.
-- [x ] The user should be able to delete a todo item by clicking a "Delete" button next to the item.
+- [x] The user should be able to delete a todo item by clicking a "Delete" button next to the item.
 - [x] The user should be able to see a count of the total number of todo items and the number of incomplete items.
 - [x] The user will have a link that says "About" that will take them to a new route.
 
