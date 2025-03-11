@@ -25,6 +25,7 @@ const todo = {
       return args.id;
     } catch (error) {
       console.error("Error deleting todo:", error);
+      throw new Error("Failed to delete todo");
     }
   },
 

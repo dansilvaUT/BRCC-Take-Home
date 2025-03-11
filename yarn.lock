@@ -1953,6 +1953,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@material-ui/lab@npm:^4.0.0-alpha.61":
+  version: 4.0.0-alpha.61
+  resolution: "@material-ui/lab@npm:4.0.0-alpha.61"
+  dependencies:
+    "@babel/runtime": "npm:^7.4.4"
+    "@material-ui/utils": "npm:^4.11.3"
+    clsx: "npm:^1.0.4"
+    prop-types: "npm:^15.7.2"
+    react-is: "npm:^16.8.0 || ^17.0.0"
+  peerDependencies:
+    "@material-ui/core": ^4.12.1
+    "@types/react": ^16.8.6 || ^17.0.0
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10/f1c05cec33908c9e3c1c5c89e27f8e8cc747c26028b701a87d6c20e0fd9df7ac7632897f370311fc2b54aed3834903243ffdf303b5d74c4d42a646a6784cca5d
+  languageName: node
+  linkType: hard
+
 "@material-ui/styles@npm:^4.11.5":
   version: 4.11.5
   resolution: "@material-ui/styles@npm:4.11.5"
@@ -3411,6 +3432,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.26.9"
     "@material-ui/core": "npm:^4.12.4"
     "@material-ui/icons": "npm:^4.11.3"
+    "@material-ui/lab": "npm:^4.0.0-alpha.61"
     "@types/material-ui": "npm:^0.21.18"
     "@types/sequelize": "npm:^4.28.20"
     apollo-boost: "npm:^0.4.9"
