@@ -10,7 +10,6 @@ import clsx from "clsx";
 import AddIcon from "@material-ui/icons/Add";
 import { useQuery, useMutation } from "@apollo/client";
 import TodoList from "../components/TodoList";
-import gql from "graphql-tag";
 
 import { GET_TODOS, ADD_TODO } from "../document-nodes/todo";
 // Styles

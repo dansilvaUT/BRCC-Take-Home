@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   makeStyles,
   CssBaseline,
@@ -6,28 +6,31 @@ import {
   Toolbar,
   Typography,
   Container,
-} from '@material-ui/core';
-import getConfig from 'next/config';
+  Link,
+} from "@material-ui/core";
+import getConfig from "next/config";
 
-const {publicRuntimeConfig: {APP_NAME}} = getConfig();
+const {
+  publicRuntimeConfig: { APP_NAME },
+} = getConfig();
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
   toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: "0 8px",
     ...theme.mixins.toolbar,
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -36,16 +39,19 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 36,
   },
   menuButtonHidden: {
-    display: 'none',
+    display: "none",
   },
   title: {
     flexGrow: 1,
   },
+  link: {
+    color: "white",
+  },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
+    height: "100vh",
+    overflow: "auto",
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -53,9 +59,9 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
   },
   fixedHeight: {
     height: 240,
@@ -68,16 +74,13 @@ const useStyles = makeStyles((theme) => ({
  * @return {*}
  * @constructor
  */
-export default function Layout({children}) {
+export default function Layout({ children }) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <CssBaseline/>
-      <AppBar
-        position="absolute"
-        className={classes.appBar}
-      >
+      <CssBaseline />
+      <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <Typography
             component="h1"
@@ -86,12 +89,17 @@ export default function Layout({children}) {
             noWrap
             className={classes.title}
           >
-            {APP_NAME || ''}
+            {APP_NAME || ""}
+          </Typography>
+          <Typography>
+            <Link href="/about" className={classes.link}>
+              About
+            </Link>
           </Typography>
         </Toolbar>
       </AppBar>
       <main className={classes.content}>
-        <div className={classes.appBarSpacer}/>
+        <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           {children}
         </Container>
