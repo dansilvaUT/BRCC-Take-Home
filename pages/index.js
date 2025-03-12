@@ -10,10 +10,22 @@ import clsx from "clsx";
 import AddIcon from "@material-ui/icons/Add";
 import { useQuery, useMutation } from "@apollo/client";
 import TodoList from "../components/TodoList";
+import { Alert } from "@material-ui/lab";
+import { alertObjMap } from "../utils/todoList.utils";
 
 import { GET_TODOS, ADD_TODO } from "../document-nodes/todo";
 // Styles
 const useStyles = makeStyles((theme) => ({
+  inputContainer: {
+    position: "relative",
+  },
+  alert: {
+    position: "absolute",
+    width: "100%",
+    top: "70px",
+    zIndex: 5,
+  },
+
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
@@ -30,29 +42,42 @@ const useStyles = makeStyles((theme) => ({
 
 const Index = () => {
   const classes = useStyles();
-  // TODO: Implement a useQuery for getting a list of current
+  const todoObj = { title: "", completed: false };
   const {
     loading: todosLoading,
     error: todosError,
     data: todosData,
   } = useQuery(GET_TODOS);
 
-  // TODO: Implement a useMutation for adding TODOs to the list
-  const [addTodoMutation, { loading: addTodoLoading, error: addTodoError }] =
-    useMutation(ADD_TODO, {
-      update(cache, { data: { createTodo } }) {
-        cache.modify({
-          fields: {
-            todos(existingTodos = []) {
-              return [...existingTodos, createTodo]; // Append new todo directly
-            },
+  const [
+    addTodoMutation,
+    { data: addedTodo, loading: addTodoLoading, error: addTodoError },
+  ] = useMutation(ADD_TODO, {
+    onError: (error) => {
+      console.error("GraphQL error:", error.message);
+    },
+    update(cache, { data: { createTodo } }) {
+      cache.modify({
+        fields: {
+          todos(existingTodos = []) {
+            return [...existingTodos, createTodo];
           },
-        });
-      },
-    });
+        },
+      });
+    },
+  });
 
-  // TODO: implement state variable for todo
-  const [newTodo, setNewTodo] = useState({ title: "", completed: false });
+  const [newTodo, setNewTodo] = useState(todoObj);
+  const [alertState, setAlertState] = useState(null);
+
+  React.useEffect(() => {
+    if (addedTodo) {
+      setAlertState(alertObjMap.addTodo);
+      setTimeout(() => {
+        setAlertState(null);
+      }, 2500);
+    }
+  }, [addedTodo]);
 
   if (todosLoading || addTodoLoading) {
     return <Typography>Loading...</Typography>;
@@ -63,21 +88,28 @@ const Index = () => {
   }
 
   return (
-    <Container maxWidth={"sm"}>
+    <Container maxWidth={"sm"} className={classes.inputContainer}>
       <form
         onSubmit={(event) => {
           event.preventDefault();
+          if (!newTodo.title) return;
           addTodoMutation({
             variables: {
               data: newTodo,
             },
           });
-          setNewTodo({
-            title: "",
-            completed: false,
-          });
+          setNewTodo(todoObj);
         }}
       >
+        {alertState && (
+          <Alert
+            variant="filled"
+            severity={alertState.severity}
+            className={classes.alert}
+          >
+            {alertState.message}
+          </Alert>
+        )}
         <TextField
           id="outlined-dense"
           label="Input task title"
@@ -98,7 +130,7 @@ const Index = () => {
           <AddIcon />
         </Fab>
       </form>
-      {/* TODO: Render TodoList component and pass todos data */}
+
       {!todosLoading && <TodoList todos={todosData.todos} />}
     </Container>
   );

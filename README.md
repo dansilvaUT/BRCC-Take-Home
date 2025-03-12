@@ -25,7 +25,7 @@ Reference the [React](https://react.dev), [Apollo](https://www.apollographql.com
 ## Bonus Points
 
 - [x] The user should be able to filter the list of todo items by typing in a search box and seeing only the items that match the search criteria.
-- [ ] The user should be able to edit the todo item inline by clicking on the description and editing it in place.
+- [x] The user should be able to edit the todo item inline by clicking on the description and editing it in place.
 
 ## Getting Started
 

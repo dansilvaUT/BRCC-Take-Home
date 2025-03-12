@@ -11,11 +11,18 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import React from "react";
-import { getNonCompletedTodos, filterTodos } from "../utils/todoList.utils";
+import {
+  getNonCompletedTodos,
+  filterTodos,
+  formatTodo,
+  alertObjMap,
+} from "../utils/todoList.utils";
 import propTypes from "prop-types";
 import { useMutation } from "@apollo/react-hooks";
 import { DELETE_TODO, UPDATE_TODO } from "../document-nodes/todo";
 import FilterSearch from "./FilterSearch";
+import { Alert } from "@material-ui/lab";
+
 // NOTE: we typically use TypeScript in our codebase, but for this coding assessment we suggest using JSDoc instead.
 
 // TODO: implement styling
@@ -27,9 +34,18 @@ const useStyles = makeStyles(() => ({
     gridTemplateColumns: "1fr 1fr",
     borderBottom: "1px solid #ccc",
   },
+  formContainer: {
+    position: "relative",
+  },
   listItem: {
     display: "flex",
+    position: "relative",
     justifyContent: "space-between",
+    transition: "1s",
+  },
+  deleted: {
+    right: "-1000px",
+    opacity: "0",
   },
   todoField: {
     border: "none",
@@ -48,24 +64,30 @@ const useStyles = makeStyles(() => ({
       cursor: "not-allowed",
     },
   },
+  iconWrapper: {
+    transition: "1.5s",
+  },
   trashIcon: {
     color: "#de4043",
   },
+  alert: {
+    width: "100%",
+    zIndex: 5,
+    position: "absolute",
+  },
 }));
 
-// TODO: Update TodoList component to render list items.
 const TodoList = ({ todos }) => {
   const classes = useStyles();
   const [search, setSearch] = React.useState("");
   const [editedTodo, setEditedTodo] = React.useState({});
+  const [deletingTodo, setDeletingTodo] = React.useState(false);
+  const [alertState, setAlertState] = React.useState(null);
+  const inputRef = React.useRef({});
 
-  const handleSave = (todo) => {
-    if (editedTodo.id === todo.id && editedTodo.title !== todo.title) {
-      console.log("Save todo", editedTodo);
-    }
-  };
+  const filteredTodos = filterTodos(todos, search);
+  const isEmpty = Object.keys(editedTodo).length === 0;
 
-  // TODO: implement deleteTodo mutation
   const [deleteTodo, { error: deleteTodoError }] = useMutation(DELETE_TODO, {
     onError: (error) => {
       console.error("GraphQL error:", error.message);
@@ -83,13 +105,46 @@ const TodoList = ({ todos }) => {
     },
   });
 
-  // TODO: implement updateTodo mutation
   const [updateTodo, { error: updateTodoError, data: updatedTodo }] =
-    useMutation(UPDATE_TODO);
+    useMutation(UPDATE_TODO, {
+      onError: (error) => {
+        console.error("GraphQL error:", error.message);
+      },
+    });
 
-  const filteredTodos = filterTodos(todos, search);
+  React.useEffect(() => {
+    if (updatedTodo) {
+      setAlertState(alertObjMap.updateTodo);
+    } else if (updateTodoError) {
+      setAlertState(alertObjMap.errorUpdateTodo);
+    }
 
-  // TODO: Render TodoList items
+    const timeoutId = setTimeout(() => {
+      setAlertState(null);
+    }, 2500);
+
+    return () => clearTimeout(timeoutId);
+  }, [updatedTodo, updateTodoError, deleteTodoError]);
+
+  const handleDeleteFadeOut = (id) => {
+    setDeletingTodo(id);
+    setTimeout(() => {
+      deleteTodo({ variables: { id } });
+      setDeletingTodo(false);
+    }, 1000);
+  };
+
+  const handleSave = (todo) => {
+    if (
+      !isEmpty &&
+      editedTodo.id === todo.id &&
+      editedTodo.title !== todo.title
+    ) {
+      formatTodo(editedTodo, updateTodo);
+      inputRef.current[todo.id]?.blur();
+    }
+  };
+
   return (
     <>
       <Container className={classes.headerContainer}>
@@ -100,17 +155,37 @@ const TodoList = ({ todos }) => {
         <FilterSearch search={search} setSearch={setSearch} />
       </Container>
       <form
+        className={classes.formContainer}
         onSubmit={(event) => {
           event.preventDefault();
-          console.log("event");
+
+          if (!isEmpty) {
+            formatTodo(editedTodo, updateTodo);
+            inputRef.current[editedTodo.id]?.blur();
+          }
         }}
       >
+        {alertState && (
+          <Alert
+            variant="filled"
+            severity={alertState.severity}
+            className={classes.alert}
+          >
+            {alertState.message}
+          </Alert>
+        )}
         {/* Hidden button so the edited todo can be submitted with enter key */}
         <button type="submit" style={{ display: "none" }} />
         <List dense>
           {filteredTodos.map((todo) => (
-            <ListItem key={todo.id} className={classes.listItem}>
+            <ListItem
+              key={todo.id}
+              className={`${classes.listItem} ${
+                deletingTodo === todo.id ? classes.deleted : ""
+              }`}
+            >
               <TextField
+                inputRef={(el) => (inputRef.current[todo.id] = el)}
                 fullWidth
                 value={
                   todo.id === editedTodo.id ? editedTodo.title : todo.title
@@ -126,20 +201,17 @@ const TodoList = ({ todos }) => {
                 className={classes.checkBox}
                 checked={todo.completed}
                 disabled={todo.completed}
-                onChange={() =>
-                  updateTodo({
-                    variables: {
-                      id: todo.id,
-                      data: { title: todo.title, completed: true },
-                    },
-                  })
-                }
+                onChange={() => formatTodo(todo, updateTodo, true)}
               />
-              <ListItemSecondaryAction>
+              <ListItemSecondaryAction
+                className={`${classes.iconWrapper} ${
+                  deletingTodo === todo.id ? classes.deleted : ""
+                }`}
+              >
                 <IconButton
                   edge="end"
                   aria-label="delete"
-                  onClick={() => deleteTodo({ variables: { id: todo.id } })}
+                  onClick={() => handleDeleteFadeOut(todo.id)}
                 >
                   <DeleteIcon className={classes.trashIcon} />
                 </IconButton>

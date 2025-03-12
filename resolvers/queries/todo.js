@@ -6,7 +6,6 @@ const todo = {
 
       return todos;
     } catch (error) {
-      console.error("Error fetching todos:", error);
       throw new Error("Failed to fetch todos");
     }
   },

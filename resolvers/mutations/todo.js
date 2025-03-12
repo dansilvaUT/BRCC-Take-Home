@@ -1,5 +1,4 @@
 const todo = {
-  // TODO: Implement the createTodo mutation
   async createTodo(parent, args, context, info) {
     try {
       const todo = await context.models.Todo.create(args.data);
@@ -8,12 +7,10 @@ const todo = {
       }
       return todo;
     } catch (error) {
-      console.error("Error creating todo:", error);
+      return error;
     }
-    return args.data;
   },
 
-  // TODO: Implement the deleteTodo mutation
   async deleteTodo(parent, args, context, info) {
     try {
       const todo = await context.models.Todo.destroy({
@@ -24,12 +21,10 @@ const todo = {
       }
       return args.id;
     } catch (error) {
-      console.error("Error deleting todo:", error);
-      throw new Error("Failed to delete todo");
+      return error;
     }
   },
 
-  // TODO: Implement the updateTodo mutation
   async updateTodo(parent, args, context, info) {
     try {
       const updatedTodoRow = await context.models.Todo.update(args.data, {
@@ -43,7 +38,7 @@ const todo = {
       const updatedTodo = await context.models.Todo.findByPk(args.id);
       return updatedTodo;
     } catch (error) {
-      console.error("Error updating todo:", error);
+      return error;
     }
   },
 };
